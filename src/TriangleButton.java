@@ -1,21 +1,24 @@
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class LineButton extends JButton implements ActionListener {
-    private final MouseHandler mouseHandler;
+public class TriangleButton extends JButton implements ActionListener {
+    private final TriangleButton.MouseHandler mouseHandler;
     private final UndoManager undoManager;
     protected JPanel drawingPanel;
     protected View view;
-    private LineCommand lineCommand;
+    private TriangleCommand triangleCommand;
 
-    public LineButton(UndoManager undoManager, View jFrame, JPanel jPanel) {
-        super("Line");
+    public TriangleButton(UndoManager undoManager, View jFrame, JPanel jPanel) {
+        super("Triangle");
         this.undoManager = undoManager;
         addActionListener(this);
         view = jFrame;
         drawingPanel = jPanel;
-        mouseHandler = new MouseHandler();
+        mouseHandler = new TriangleButton.MouseHandler();
     }
 
     public void actionPerformed(ActionEvent event) {
@@ -30,14 +33,16 @@ public class LineButton extends JButton implements ActionListener {
 
         public void mouseClicked(MouseEvent event) {
             if (++pointCount == 1) {
-                lineCommand = new LineCommand(View.mapPoint(event.getPoint()));
-                undoManager.beginCommand(lineCommand);
+                triangleCommand = new TriangleCommand(View.mapPoint(event.getPoint()));
+                undoManager.beginCommand(triangleCommand);
             } else if (pointCount == 2) {
+                triangleCommand.setTrianglePoint(View.mapPoint(event.getPoint()));
+            } else if (pointCount == 3) {
                 pointCount = 0;
-                lineCommand.setLinePoint(View.mapPoint(event.getPoint()));
+                triangleCommand.setTrianglePoint(View.mapPoint(event.getPoint()));
                 drawingPanel.removeMouseListener(this);
                 view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                undoManager.endCommand(lineCommand);
+                undoManager.endCommand(triangleCommand);
             }
         }
     }
