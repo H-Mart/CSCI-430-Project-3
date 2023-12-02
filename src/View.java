@@ -25,25 +25,7 @@ class View extends JFrame {
     private String fileName;
 
     public View() {
-        super("Drawing Program 1.1  Untitled");
-        try {
-            var looksAvailable = new HashMap<String, UIManager.LookAndFeelInfo>();
-            Arrays.stream(UIManager.getInstalledLookAndFeels())
-                    .peek(info -> looksAvailable.put(info.getName(), info));
-
-            if (looksAvailable.containsKey("Windows")) {
-                UIManager.setLookAndFeel(looksAvailable.get("Windows").getClassName());
-            } else if (looksAvailable.containsKey("GTK+")) {
-                UIManager.setLookAndFeel(looksAvailable.get("GTK+").getClassName());
-            } else if (looksAvailable.containsKey("Nimbus")) {
-                UIManager.setLookAndFeel(looksAvailable.get("Nimbus").getClassName());
-            } else {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            }
-        } catch (Exception e) {
-            // If Nimbus is not available, you can set the GUI to another look and feel.
-            System.out.println("Error setting look and feel");
-        }
+        super("Drawing Program 2.0 Now with Polygons!");
         fileName = null;
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent event) {
