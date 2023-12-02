@@ -25,7 +25,6 @@ public class TranslateButton extends JButton implements ActionListener {
         view.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
         // Change cursor when button is clicked
         drawingPanel.addMouseListener(mouseHandler);
-        drawingPanel.addMouseMotionListener(mouseHandler);
         // Start listening for mouseclicks on the drawing panel
     }
 
@@ -52,20 +51,5 @@ public class TranslateButton extends JButton implements ActionListener {
             undoManager.endCommand(translateCommand);
             isDragging = false;
         }
-
-//        public void mouseDragged(MouseEvent event) {
-//            if (isDragging) {
-//                int x2 = Math.round((float) (View.mapPoint(event.getPoint()).getX()));
-//                int y2 = Math.round((float) (View.mapPoint(event.getPoint()).getY()));
-//                translateCommand.setDeltaX(x2 - x1);
-//                translateCommand.setDeltaY(y2 - y1);
-//                translateCommand.addToFinalDeltaX(x2 - x1);
-//                translateCommand.addToFinalDeltaY(y2 - y1);
-//                undoManager.endCommand(translateCommand);
-//                undoManager.beginCommand(translateCommand);
-//                x1 = x2;
-//                y1 = y2;
-//            }
-//        }
     }
 }

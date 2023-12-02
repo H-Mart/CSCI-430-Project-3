@@ -5,7 +5,7 @@ public class RedoButton extends JButton implements ActionListener {
     private final UndoManager undoManager;
 
     public RedoButton(UndoManager undoManager) {
-        super("redo");
+        super("Redo");
         this.undoManager = undoManager;
         addActionListener(this);
     }

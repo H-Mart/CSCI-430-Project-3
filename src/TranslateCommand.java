@@ -1,11 +1,6 @@
-import java.util.Enumeration;
-import java.util.Vector;
-
 public class TranslateCommand extends Command {
     private final int initialX;
     private final int initialY;
-    private int movingX;
-    private int movingY;
     private int finalX;
     private int finalY;
     private boolean wasUndone = false;
@@ -17,14 +12,11 @@ public class TranslateCommand extends Command {
     public TranslateCommand(int initialX, int initialY) {
         this.initialX = initialX;
         this.initialY = initialY;
-        this.movingX = initialX;
-        this.movingY = initialY;
         this.finalX = initialX;
         this.finalY = initialY;
     }
 
     public void execute() {
-        model.translateSelected(movingX - initialX, movingY - initialY);
     }
 
     public boolean undo() {
@@ -57,5 +49,4 @@ public class TranslateCommand extends Command {
     public void setFinalY(int finalY) {
         this.finalY = finalY;
     }
-
 }
