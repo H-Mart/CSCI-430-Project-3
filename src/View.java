@@ -78,7 +78,7 @@ class View extends JFrame {
         buttonPanel.add(openButton);
         buttonPanel.add(undoButton);
         buttonPanel.add(redoButton);
-        this.setSize(600, 400);
+        this.setSize(800, 600);
     }
 
     public static void setModel(Model model) {

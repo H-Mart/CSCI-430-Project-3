@@ -45,6 +45,15 @@ public class Model {
         }
     }
 
+    public void translateSelected(int deltaX, int deltaY) {
+        Enumeration<Item> enumeration = selectedList.elements();
+        while (enumeration.hasMoreElements()) {
+            Item item = enumeration.nextElement();
+            item.translate(deltaX, deltaY);
+        }
+        view.refresh();
+    }
+
     public void deleteSelectedItems() {
         selectedList.removeAllElements();
         view.refresh();

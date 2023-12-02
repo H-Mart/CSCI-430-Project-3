@@ -2,89 +2,60 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 public class TranslateCommand extends Command {
-    private int deltaX = 0;
-    private int deltaY = 0;
-    private int finalDeltaX = 0;
-    private int finalDeltaY = 0;
-    private int redoDeltaX = 0;
-    private int redoDeltaY = 0;
-    private final Vector<Item> itemList;
+    private final int initialX;
+    private final int initialY;
+    private int movingX;
+    private int movingY;
+    private int finalX;
+    private int finalY;
+    private boolean wasUndone = false;
 
     public TranslateCommand() {
-        itemList = new Vector<>();
-        Enumeration<Item> enumeration = model.getSelectedItems();
-        while (enumeration.hasMoreElements()) {
-            Item item = enumeration.nextElement();
-            itemList.add(item);
-        }
+        this(0, 0);
+    }
+
+    public TranslateCommand(int initialX, int initialY) {
+        this.initialX = initialX;
+        this.initialY = initialY;
+        this.movingX = initialX;
+        this.movingY = initialY;
+        this.finalX = initialX;
+        this.finalY = initialY;
     }
 
     public void execute() {
+        model.translateSelected(movingX - initialX, movingY - initialY);
     }
 
     public boolean undo() {
-        if (finalDeltaX == 0 && finalDeltaY == 0) {
-            return false;
+        if (wasUndone) {
+            return true;
         }
-
-        Enumeration<Item> enumeration = itemList.elements();
-        while (enumeration.hasMoreElements()) {
-            Item item = enumeration.nextElement();
-            item.translate(-finalDeltaX, -finalDeltaY);
-        }
-
-        finalDeltaX = 0;
-        finalDeltaY = 0;
-
-        model.setChanged();
+        model.translateSelected(initialX - finalX, initialY - finalY);
+        wasUndone = true;
         return true;
     }
 
     public boolean redo() {
-        System.out.println("redoDeltaX: " + redoDeltaX + ", redoDeltaY: " + redoDeltaY);
-        if (redoDeltaX == 0 && redoDeltaY == 0) {
-            return false;
+        if (!wasUndone) {
+            return true;
         }
-
-        Enumeration<Item> enumeration = itemList.elements();
-        while (enumeration.hasMoreElements()) {
-            Item item = enumeration.nextElement();
-            item.translate(redoDeltaX, redoDeltaY);
-        }
-
-        finalDeltaX += redoDeltaX;
-        finalDeltaY += redoDeltaY;
-
-        redoDeltaX = 0;
-        redoDeltaY = 0;
-
+        model.translateSelected(finalX - initialX, finalY - initialY);
+        wasUndone = false;
         return true;
     }
 
     public boolean end() {
-        Enumeration<Item> enumeration = itemList.elements();
-        while (enumeration.hasMoreElements()) {
-            Item item = enumeration.nextElement();
-            item.translate(deltaX, deltaY);
-        }
+        model.translateSelected(finalX - initialX, finalY - initialY);
         return true;
     }
 
-    public void setDeltaX(int deltaX) {
-        this.deltaX = deltaX;
+    public void setFinalX(int finalX) {
+        this.finalX = finalX;
     }
 
-    public void setDeltaY(int deltaY) {
-        this.deltaY = deltaY;
+    public void setFinalY(int finalY) {
+        this.finalY = finalY;
     }
 
-    public void addToFinalDeltaX(int deltaX) {
-        this.finalDeltaX += deltaX;
-        this.redoDeltaX += deltaX;
-    }
-
-    public void addToFinalDeltaY(int deltaY) {
-        this.finalDeltaY += deltaY;
-        this.redoDeltaY += deltaY;
-    }
 }

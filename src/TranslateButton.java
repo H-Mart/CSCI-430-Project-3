@@ -31,14 +31,12 @@ public class TranslateButton extends JButton implements ActionListener {
 
     private class MouseHandler extends MouseAdapter {
         private Boolean isDragging = false;
-        private int x1;
-        private int y1;
 
         public void mousePressed(MouseEvent event) {
             if (!isDragging) {
-                x1 = Math.round((float) (View.mapPoint(event.getPoint()).getX()));
-                y1 = Math.round((float) (View.mapPoint(event.getPoint()).getY()));
-                translateCommand = new TranslateCommand();
+                int x1 = Math.round((float) (View.mapPoint(event.getPoint()).getX()));
+                int y1 = Math.round((float) (View.mapPoint(event.getPoint()).getY()));
+                translateCommand = new TranslateCommand(x1, y1);
                 undoManager.beginCommand(translateCommand);
                 isDragging = true;
             }
@@ -47,29 +45,27 @@ public class TranslateButton extends JButton implements ActionListener {
         public void mouseReleased(MouseEvent event) {
             int x2 = Math.round((float) (View.mapPoint(event.getPoint()).getX()));
             int y2 = Math.round((float) (View.mapPoint(event.getPoint()).getY()));
-            translateCommand.setDeltaX(x2 - x1);
-            translateCommand.setDeltaY(y2 - y1);
-            translateCommand.addToFinalDeltaX(x2 - x1);
-            translateCommand.addToFinalDeltaY(y2 - y1);
+            translateCommand.setFinalX(x2);
+            translateCommand.setFinalY(y2);
             drawingPanel.removeMouseListener(this);
             view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             undoManager.endCommand(translateCommand);
             isDragging = false;
         }
 
-        public void mouseDragged(MouseEvent event) {
-            if (isDragging) {
-                int x2 = Math.round((float) (View.mapPoint(event.getPoint()).getX()));
-                int y2 = Math.round((float) (View.mapPoint(event.getPoint()).getY()));
-                translateCommand.setDeltaX(x2 - x1);
-                translateCommand.setDeltaY(y2 - y1);
-                translateCommand.addToFinalDeltaX(x2 - x1);
-                translateCommand.addToFinalDeltaY(y2 - y1);
-                undoManager.endCommand(translateCommand);
-                undoManager.beginCommand(translateCommand);
-                x1 = x2;
-                y1 = y2;
-            }
-        }
+//        public void mouseDragged(MouseEvent event) {
+//            if (isDragging) {
+//                int x2 = Math.round((float) (View.mapPoint(event.getPoint()).getX()));
+//                int y2 = Math.round((float) (View.mapPoint(event.getPoint()).getY()));
+//                translateCommand.setDeltaX(x2 - x1);
+//                translateCommand.setDeltaY(y2 - y1);
+//                translateCommand.addToFinalDeltaX(x2 - x1);
+//                translateCommand.addToFinalDeltaY(y2 - y1);
+//                undoManager.endCommand(translateCommand);
+//                undoManager.beginCommand(translateCommand);
+//                x1 = x2;
+//                y1 = y2;
+//            }
+//        }
     }
 }
